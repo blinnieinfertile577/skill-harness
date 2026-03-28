@@ -4,167 +4,146 @@
   <img src="logo.svg" alt="skill-harness logo" width="128" height="128" />
 </p>
 
-<p align="center">
-  <img src="banner.svg" alt="skill-harness banner" width="100%" />
-</p>
+`skill-harness` is the umbrella repo for the skill-pack suite. It installs the shared skills from the pack repos, then installs the shared Claude and Codex agents that sit on top of them.
 
-<p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
-  <img src="https://img.shields.io/badge/claude_agents-19-2563eb" alt="19 Claude agents" />
-  <img src="https://img.shields.io/badge/codex_agents-19-1d4ed8" alt="19 Codex agents" />
-  <img src="https://img.shields.io/badge/pack_repos-26-0f766e" alt="26 dependent pack repos" />
-</p>
+## What this repo gives you
 
-`skill-harness` is the umbrella entrypoint for the skill-pack suite. It bootstraps pack repos, installs shared skills into Claude and Codex homes, and installs curated multi-pack agents on top.
+- one place to install the suite
+- shared multi-pack agents for Claude and Codex
+- dependency bootstrap for the pack repos
+- a Go CLI for installing everything or only what you want
 
-## What it installs
+## Install
 
-- skill packs from the dependent pack repos
-- Claude agents from `.claude/agents/*.md`
-- Codex agents from `.codex/agents/*.toml`
-- a small Codex helper plugin under `plugins/skill-harness-helpers/`
+You can install it in any of these ways.
 
-## Included agents
-
-- `requirements-analyst`
-- `requirements-analyst-beads`
-- `ux-researcher`
-- `system-modeler`
-- `system-modeler-beads`
-- `software-architect`
-- `software-architect-beads`
-- `web-engineer`
-- `backend-engineer`
-- `test-designer`
-- `test-designer-beads`
-- `qa-automation-engineer`
-- `quality-reviewer`
-- `security-reviewer`
-- `security-reviewer-beads`
-- `pentest-reviewer`
-- `delivery-manager`
-- `delivery-manager-beads`
-- `research-writer`
-
-## CLI
-
-Build the CLI:
+### 1. Build the CLI and use it directly
 
 ```bash
+git clone https://github.com/45ck/skill-harness.git
+cd skill-harness
 go build -o skill-harness ./cmd/skill-harness
+./skill-harness install --all
 ```
 
 Windows:
 
 ```powershell
+git clone https://github.com/45ck/skill-harness.git
+cd skill-harness
 go build -o skill-harness.exe .\cmd\skill-harness
+.\skill-harness.exe install --all
 ```
 
-List what is available:
+### 2. Use the wrapper scripts
 
 ```bash
-./skill-harness list
+bash install.sh
 ```
 
-Install everything:
-
-```bash
-./skill-harness install --all
+```powershell
+.\install.ps1
 ```
 
-Install selected agents:
+### 3. Install only what you need
+
+Selected agents:
 
 ```bash
 ./skill-harness install --agents=requirements-analyst,system-modeler,security-reviewer
 ```
 
-Install selected packs without agents:
+Selected packs only:
 
 ```bash
 ./skill-harness install --packs=business-analysis-skills,documentation-evidence-skills --packs-only
 ```
 
-Use the interactive picker:
+Interactive picker:
 
 ```bash
 ./skill-harness install --interactive
 ```
 
-Check installed agent dependencies:
+### 4. Let another agent install it for you
 
-```bash
-./skill-harness check --agents=software-architect,security-reviewer
-```
+Point the agent at [AGENT_INSTRUCTIONS.md](AGENT_INSTRUCTIONS.md) and tell it to follow that file exactly.
 
-Render Codex agent files only:
+## Included agents
 
-```bash
-./skill-harness render --agents=test-designer,qa-automation-engineer
-```
+- `requirements-analyst`: requirements clarification, assumptions, acceptance criteria, prioritization
+- `requirements-analyst-beads`: same domain, but outputs trackable follow-up items
+- `ux-researcher`: personas, task analysis, usability planning, prototype feedback
+- `system-modeler`: use cases, sequence/activity/state diagrams, model consistency
+- `system-modeler-beads`: same domain, but outputs trackable follow-up items
+- `software-architect`: architecture options, ADRs, tradeoffs, runtime and deployment views
+- `software-architect-beads`: same domain, but outputs trackable follow-up items
+- `web-engineer`: routes, controllers, validation, request/response flow, MVC boundaries
+- `backend-engineer`: entities, repositories, transactions, API contracts, schema design
+- `test-designer`: EP/BVA, decision tables, state-based tests, coverage and oracles
+- `test-designer-beads`: same domain, but outputs trackable follow-up items
+- `qa-automation-engineer`: unit, integration, API, UI, fixtures, regression suites
+- `quality-reviewer`: code review, technical debt, code smells, rework planning
+- `security-reviewer`: threat surfaces, trust boundaries, auth, secrets, prompt/tool risks
+- `security-reviewer-beads`: same domain, but outputs trackable follow-up items
+- `pentest-reviewer`: authorized security testing, recon, findings, repro, remediation priority
+- `delivery-manager`: sprint goals, backlog quality, risk, release and maintenance readiness
+- `delivery-manager-beads`: same domain, but outputs trackable follow-up items
+- `research-writer`: search strategy, source screening, related work, evidence synthesis
 
-Remove installed agents:
+## Included pack repos
 
-```bash
-./skill-harness uninstall --agents=delivery-manager,delivery-manager-beads
-```
+The harness bootstraps pack repos into `~/.skill-harness/packs/` and syncs their skills into:
 
-## Wrapper scripts
+- `~/.claude/skills/`
+- `~/.agents/skills/`
 
-The repo still ships shell wrappers for quick use:
+Current dependent pack repos:
 
-```bash
-bash install.sh
-bash uninstall.sh --agents=quality-reviewer
-```
+- `agile-delivery-skills`
+- `authentication-cryptography-skills`
+- `automation-testing-skills`
+- `backend-persistence-skills`
+- `business-analysis-skills`
+- `code-review-inspection-skills`
+- `data-structures-algorithmic-reasoning-skills`
+- `deployment-release-skills`
+- `design-for-testability-skills`
+- `documentation-evidence-skills`
+- `enterprise-architecture-integration-skills`
+- `hci-review-skill`
+- `llm-agent-security-skills`
+- `maintenance-evolution-skills`
+- `non-functional-testing-skills`
+- `oop-code-structure-skills`
+- `pentest-security-testing-skills`
+- `project-management-skills`
+- `refactoring-code-smells-skills`
+- `research-literature-review-skills`
+- `security-engineering-skills`
+- `software-architecture-skills`
+- `software-quality-skills`
+- `uml-analysis-modelling-skills`
+- `verification-test-design-skills`
+- `web-engineering-skills`
 
-```powershell
-.\install.ps1
-.\uninstall.ps1 --agents=quality-reviewer
-```
+## Commands
 
-Those wrappers call the Go CLI from the repo root.
+- `./skill-harness list`
+- `./skill-harness install --all`
+- `./skill-harness install --interactive`
+- `./skill-harness install --agents=a,b`
+- `./skill-harness install --packs=x,y --packs-only`
+- `./skill-harness check --agents=a,b`
+- `./skill-harness render --agents=a,b`
+- `./skill-harness uninstall --agents=a,b`
 
-## Install behavior
+## Files
 
-When you install with agent selections, `skill-harness`:
-
-- clones or updates the required pack repos into `~/.skill-harness/packs/`
-- syncs packaged skills into `~/.claude/skills/` and `~/.agents/skills/`
-- normalizes installed `SKILL.md` files for Codex compatibility
-- installs the selected Claude agents into `~/.claude/agents/`
-- renders the selected Codex agents into `~/.codex/agents/`
-- validates that the selected agents have all required skills installed
-
-With `--all`, it installs every configured pack repo and every shared agent.
-
-## Structure
-
-```text
-.claude/agents/*.md                    Claude agents with explicit skill preload lists
-.codex/agents/*.toml                   Codex agent profiles
-cmd/skill-harness/main.go              Go CLI entrypoint
-docs/agent-loadouts.md                 Curated skill mapping per agent
-scripts/bootstrap_dependencies.py      Pack bootstrap and skill sync
-scripts/check_dependencies.py          Agent dependency verification
-scripts/render_codex_agents.py         Codex agent renderer
-scripts/normalize_skills.py            Installed skill frontmatter normalizer
-plugins/skill-harness-helpers/         Codex helper plugin scaffold
-AGENTS.md                              Root guidance for the harness repo
-```
-
-## Design
-
-- Pack repos remain the source of truth for reusable skills.
-- `skill-harness` is the shared install and orchestration layer.
-- Agents stay thin and role-scoped instead of mirroring every pack one-for-one.
-- Claude agents preload a tight skill list.
-- Codex agents stay repo-scoped and render local `[[skills.config]]` paths.
-- Beads variants keep the same core loadout but shift the output toward trackable work items.
-
-## Related Repos
-
-- Pack repos: the topic-focused skill libraries
-- `skill-harness`: the umbrella installer and shared multi-pack agent layer
+- [cmd/skill-harness/main.go](cmd/skill-harness/main.go): Go CLI
+- [AGENT_INSTRUCTIONS.md](AGENT_INSTRUCTIONS.md): exact instructions for another agent to install it correctly
+- [docs/agent-loadouts.md](docs/agent-loadouts.md): agent-to-skill mapping
+- [scripts/dependencies.json](scripts/dependencies.json): repo dependency map
 
 ## License
 
