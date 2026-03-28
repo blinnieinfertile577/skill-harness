@@ -55,6 +55,8 @@ func main() {
 		runList(root, deps, loadouts, os.Args[2:])
 	case "install":
 		runInstall(root, deps, loadouts, os.Args[2:])
+	case "setup-project":
+		runSetupProject(os.Args[2:])
 	case "check":
 		runCheck(root, loadouts, os.Args[2:])
 	case "render":
@@ -137,6 +139,54 @@ func runInstall(root string, deps dependencyConfig, loadouts loadoutConfig, args
 	}
 
 	fmt.Printf("Installed %d pack repo(s) and %d agent(s)\n", len(repos), len(agents))
+}
+
+func runSetupProject(args []string) {
+	fs := flag.NewFlagSet("setup-project", flag.ExitOnError)
+	targetDir := fs.String("dir", ".", "Target project directory.")
+	skipNoslop := fs.Bool("skip-noslop", false, "Do not install @45ck/noslop.")
+	skipAgentDocs := fs.Bool("skip-agent-docs", false, "Do not install 45ck/agent-docs.")
+	installOnly := fs.Bool("install-only", false, "Install packages only; skip initialization commands.")
+	fs.Parse(args)
+
+	projectDir, err := filepath.Abs(*targetDir)
+	exitOnErr(err)
+
+	exitOnErr(requireCommand("npm"))
+	exitOnErr(requireCommand("npx"))
+
+	if _, err := os.Stat(filepath.Join(projectDir, "package.json")); errors.Is(err, os.ErrNotExist) {
+		exitOnErr(writeMinimalPackageJSON(projectDir))
+	}
+
+	packages := []string{}
+	if !*skipNoslop {
+		packages = append(packages, "@45ck/noslop")
+	}
+	if !*skipAgentDocs {
+		packages = append(packages, "github:45ck/agent-docs")
+	}
+	if len(packages) > 0 {
+		args := append([]string{"install", "-D"}, packages...)
+		exitOnErr(runCommand(projectDir, "npm", args...))
+	}
+
+	if *installOnly {
+		fmt.Printf("Installed project tooling in %s\n", projectDir)
+		return
+	}
+
+	if !*skipAgentDocs {
+		exitOnErr(runCommand(projectDir, "npx", "agent-docs", "init"))
+	}
+	if !*skipNoslop {
+		exitOnErr(runCommand(projectDir, "npx", "noslop", "init"))
+	}
+	if !*skipAgentDocs {
+		exitOnErr(runCommand(projectDir, "npx", "agent-docs", "install-gates", "--quality"))
+	}
+
+	fmt.Printf("Project setup complete in %s\n", projectDir)
 }
 
 func runCheck(root string, loadouts loadoutConfig, args []string) {
@@ -366,6 +416,14 @@ func runPython(root, script string, args ...string) error {
 	return command.Run()
 }
 
+func runCommand(dir, name string, args ...string) error {
+	command := exec.Command(name, args...)
+	command.Stdout = os.Stdout
+	command.Stderr = os.Stderr
+	command.Dir = dir
+	return command.Run()
+}
+
 func loadDependencies(root string) dependencyConfig {
 	var cfg dependencyConfig
 	data := mustRead(filepath.Join(root, "scripts", "dependencies.json"))
@@ -384,6 +442,36 @@ func mustRead(path string) []byte {
 	data, err := os.ReadFile(path)
 	exitOnErr(err)
 	return data
+}
+
+func requireCommand(name string) error {
+	if _, err := exec.LookPath(name); err != nil {
+		return fmt.Errorf("%s is required on PATH", name)
+	}
+	return nil
+}
+
+func writeMinimalPackageJSON(projectDir string) error {
+	base := strings.ToLower(filepath.Base(projectDir))
+	replacer := strings.NewReplacer(" ", "-", "_", "-", ".", "-", "/", "-", "\\", "-")
+	name := replacer.Replace(base)
+	for strings.Contains(name, "--") {
+		name = strings.ReplaceAll(name, "--", "-")
+	}
+	name = strings.Trim(name, "-")
+	if name == "" {
+		name = "skill-harness-project"
+	}
+	content, err := json.MarshalIndent(map[string]any{
+		"name":    name,
+		"private": true,
+		"version": "0.0.0",
+	}, "", "  ")
+	if err != nil {
+		return err
+	}
+	content = append(content, '\n')
+	return os.WriteFile(filepath.Join(projectDir, "package.json"), content, 0o644)
 }
 
 func findRepoRoot() (string, error) {
@@ -477,6 +565,7 @@ func printUsage(loadouts loadoutConfig, deps dependencyConfig) {
 	fmt.Println("Commands:")
 	fmt.Println("  list [--agents] [--packs]")
 	fmt.Println("  install [--all] [--interactive] [--packs-only] [--agents-only] [--agents=a,b] [--packs=x,y]")
+	fmt.Println("  setup-project [--dir path] [--install-only] [--skip-noslop] [--skip-agent-docs]")
 	fmt.Println("  check [--all] [--interactive] [--agents=a,b]")
 	fmt.Println("  render [--all] [--interactive] [--agents=a,b]")
 	fmt.Println("  uninstall [--all] [--interactive] [--agents=a,b]")

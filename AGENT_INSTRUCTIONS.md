@@ -1,23 +1,19 @@
 # Agent Instructions
 
-Use this file when another agent needs to install `skill-harness` correctly without guessing.
+Use this file when another agent needs to install or use `skill-harness` correctly.
 
-## Goal
+## What this repo is for
 
-Install the `skill-harness` suite so that:
+`skill-harness` is both:
 
-- dependent pack repos are cloned into `~/.skill-harness/packs/`
-- skills are synced into `~/.claude/skills/` and `~/.agents/skills/`
-- Claude agents are installed into `~/.claude/agents/`
-- Codex agents are rendered into `~/.codex/agents/`
+- the installer for the shared 45ck skill-pack and agent suite
+- the setup repo for project-level tooling based on `@45ck/noslop` and `45ck/agent-docs`
 
-## Preferred install path
+## Shared suite install
 
-If Go is available:
+Run this from the repo root when the goal is to install the shared packs and agents:
 
 ```bash
-git clone https://github.com/45ck/skill-harness.git
-cd skill-harness
 go build -o skill-harness ./cmd/skill-harness
 ./skill-harness install --all
 ```
@@ -25,72 +21,68 @@ go build -o skill-harness ./cmd/skill-harness
 Windows:
 
 ```powershell
-git clone https://github.com/45ck/skill-harness.git
-cd skill-harness
 go build -o skill-harness.exe .\cmd\skill-harness
 .\skill-harness.exe install --all
 ```
 
-## Fallback install path
-
-If you should not build the binary, run the wrapper scripts from the repo root.
+Selective install examples:
 
 ```bash
-bash install.sh
-```
-
-```powershell
-.\install.ps1
-```
-
-Those wrappers call the Go CLI via `go run`.
-
-## Selective install
-
-Install only selected agents:
-
-```bash
-./skill-harness install --agents=requirements-analyst,system-modeler,security-reviewer
-```
-
-Install only selected packs:
-
-```bash
+./skill-harness install --agents=requirements-analyst,system-modeler
 ./skill-harness install --packs=business-analysis-skills,documentation-evidence-skills --packs-only
-```
-
-Use the interactive installer:
-
-```bash
 ./skill-harness install --interactive
 ```
 
-## Verification
+## Project setup
 
-After install, run:
+Run this when the goal is to bootstrap a target repo with the 45ck project tooling stack:
+
+```bash
+./skill-harness setup-project --dir path/to/project
+```
+
+Default behavior:
+
+- create `package.json` if missing
+- install `@45ck/noslop`
+- install `45ck/agent-docs`
+- run `agent-docs init`
+- run `noslop init`
+- run `agent-docs install-gates --quality`
+
+Useful variants:
+
+```bash
+./skill-harness setup-project --dir path/to/project --install-only
+./skill-harness setup-project --dir path/to/project --skip-agent-docs
+./skill-harness setup-project --dir path/to/project --skip-noslop
+```
+
+## Rules
+
+- Run commands from the repo root unless the command explicitly targets another directory.
+- Prefer the CLI over manual copying.
+- Do not assume pack repos are already installed.
+- Do not assume `noslop` or `agent-docs` are already present in the target project.
+- Use `setup-project` for project scaffolding instead of inventing a custom sequence.
+
+## Verify
+
+After shared-suite installation:
 
 ```bash
 ./skill-harness check --all
 ```
 
-Or for a subset:
+After project setup:
 
-```bash
-./skill-harness check --agents=requirements-analyst,system-modeler
-```
+- confirm `package.json` exists in the target repo
+- confirm `@45ck/noslop` and `agent-docs` were installed
+- confirm the initialization commands completed without error
 
-## Important rules
-
-- Run commands from the repo root.
-- Do not manually copy skill directories if the CLI or wrappers can do it.
-- Do not assume the pack repos are already installed.
-- Let `skill-harness` bootstrap dependencies itself.
-- If validation fails because of bad installed `SKILL.md` files, rerun the install path first before patching individual skills.
-
-## Useful files
+## Reference files
 
 - [README.md](README.md)
 - [cmd/skill-harness/main.go](cmd/skill-harness/main.go)
 - [scripts/dependencies.json](scripts/dependencies.json)
-- [scripts/bootstrap_dependencies.py](scripts/bootstrap_dependencies.py)
-- [scripts/check_dependencies.py](scripts/check_dependencies.py)
+- [scripts/build_release.py](scripts/build_release.py)
