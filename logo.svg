@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title>workflow-agents logo</title>
+  <desc>Blue workflow lanes and nodes.</desc>
+  <defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#1d4ed8" /><stop offset="100%" stop-color="#0f172a" /></linearGradient></defs>
+  <rect width="256" height="256" rx="48" fill="url(#bg)" />
+  <path d="M64 88h64a20 20 0 0 1 20 20v8a20 20 0 0 0 20 20h24" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" />
+  <path d="M64 168h40a20 20 0 0 0 20-20v-8a20 20 0 0 1 20-20h48" fill="none" stroke="#93c5fd" stroke-width="12" stroke-linecap="round" />
+  <circle cx="56" cy="88" r="16" fill="#fff" />
+  <circle cx="56" cy="168" r="16" fill="#93c5fd" />
+  <circle cx="200" cy="136" r="18" fill="#fff" />
+</svg>
