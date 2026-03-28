@@ -1,0 +1,173 @@
+{
+  "repos": {
+    "business-analysis-skills": {
+      "url": "https://github.com/45ck/business-analysis-skills.git"
+    },
+    "documentation-evidence-skills": {
+      "url": "https://github.com/45ck/documentation-evidence-skills.git"
+    },
+    "hci-review-skill": {
+      "url": "https://github.com/45ck/hci-review-skill.git"
+    },
+    "uml-analysis-modelling-skills": {
+      "url": "https://github.com/45ck/uml-analysis-modelling-skills.git"
+    },
+    "software-architecture-skills": {
+      "url": "https://github.com/45ck/software-architecture-skills.git"
+    },
+    "enterprise-architecture-integration-skills": {
+      "url": "https://github.com/45ck/enterprise-architecture-integration-skills.git"
+    },
+    "web-engineering-skills": {
+      "url": "https://github.com/45ck/web-engineering-skills.git"
+    },
+    "backend-persistence-skills": {
+      "url": "https://github.com/45ck/backend-persistence-skills.git"
+    },
+    "oop-code-structure-skills": {
+      "url": "https://github.com/45ck/oop-code-structure-skills.git"
+    },
+    "data-structures-algorithmic-reasoning-skills": {
+      "url": "https://github.com/45ck/data-structures-algorithmic-reasoning-skills.git"
+    },
+    "verification-test-design-skills": {
+      "url": "https://github.com/45ck/verification-test-design-skills.git"
+    },
+    "non-functional-testing-skills": {
+      "url": "https://github.com/45ck/non-functional-testing-skills.git"
+    },
+    "design-for-testability-skills": {
+      "url": "https://github.com/45ck/design-for-testability-skills.git"
+    },
+    "automation-testing-skills": {
+      "url": "https://github.com/45ck/automation-testing-skills.git"
+    },
+    "software-quality-skills": {
+      "url": "https://github.com/45ck/software-quality-skills.git"
+    },
+    "code-review-inspection-skills": {
+      "url": "https://github.com/45ck/code-review-inspection-skills.git"
+    },
+    "refactoring-code-smells-skills": {
+      "url": "https://github.com/45ck/refactoring-code-smells-skills.git"
+    },
+    "security-engineering-skills": {
+      "url": "https://github.com/45ck/security-engineering-skills.git"
+    },
+    "authentication-cryptography-skills": {
+      "url": "https://github.com/45ck/authentication-cryptography-skills.git"
+    },
+    "llm-agent-security-skills": {
+      "url": "https://github.com/45ck/llm-agent-security-skills.git"
+    },
+    "pentest-security-testing-skills": {
+      "url": "https://github.com/45ck/pentest-security-testing-skills.git"
+    },
+    "agile-delivery-skills": {
+      "url": "https://github.com/45ck/agile-delivery-skills.git"
+    },
+    "project-management-skills": {
+      "url": "https://github.com/45ck/project-management-skills.git"
+    },
+    "deployment-release-skills": {
+      "url": "https://github.com/45ck/deployment-release-skills.git"
+    },
+    "maintenance-evolution-skills": {
+      "url": "https://github.com/45ck/maintenance-evolution-skills.git"
+    },
+    "research-literature-review-skills": {
+      "url": "https://github.com/45ck/research-literature-review-skills.git"
+    }
+  },
+  "agents": {
+    "requirements-analyst": {
+      "repos": [
+        "business-analysis-skills",
+        "documentation-evidence-skills"
+      ]
+    },
+    "ux-researcher": {
+      "repos": [
+        "hci-review-skill",
+        "business-analysis-skills",
+        "documentation-evidence-skills"
+      ]
+    },
+    "system-modeler": {
+      "repos": [
+        "uml-analysis-modelling-skills",
+        "business-analysis-skills",
+        "software-architecture-skills"
+      ]
+    },
+    "software-architect": {
+      "repos": [
+        "software-architecture-skills",
+        "enterprise-architecture-integration-skills",
+        "documentation-evidence-skills"
+      ]
+    },
+    "web-engineer": {
+      "repos": [
+        "web-engineering-skills",
+        "backend-persistence-skills",
+        "oop-code-structure-skills"
+      ]
+    },
+    "backend-engineer": {
+      "repos": [
+        "backend-persistence-skills",
+        "oop-code-structure-skills",
+        "data-structures-algorithmic-reasoning-skills"
+      ]
+    },
+    "test-designer": {
+      "repos": [
+        "verification-test-design-skills",
+        "non-functional-testing-skills",
+        "design-for-testability-skills"
+      ]
+    },
+    "qa-automation-engineer": {
+      "repos": [
+        "automation-testing-skills",
+        "verification-test-design-skills",
+        "documentation-evidence-skills"
+      ]
+    },
+    "quality-reviewer": {
+      "repos": [
+        "software-quality-skills",
+        "code-review-inspection-skills",
+        "refactoring-code-smells-skills"
+      ]
+    },
+    "security-reviewer": {
+      "repos": [
+        "security-engineering-skills",
+        "authentication-cryptography-skills",
+        "llm-agent-security-skills"
+      ]
+    },
+    "pentest-reviewer": {
+      "repos": [
+        "pentest-security-testing-skills",
+        "security-engineering-skills"
+      ]
+    },
+    "delivery-manager": {
+      "repos": [
+        "agile-delivery-skills",
+        "project-management-skills",
+        "deployment-release-skills",
+        "maintenance-evolution-skills"
+      ]
+    },
+    "research-writer": {
+      "repos": [
+        "research-literature-review-skills",
+        "documentation-evidence-skills"
+      ]
+    }
+  }
+}

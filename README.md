@@ -60,7 +60,20 @@ cd workflow-agents
 .\install.ps1
 ```
 
-The relevant skill packs should already be installed under `~/.agents/skills/` and `~/.claude/skills/`.
+The installer is dependency-aware:
+
+- it clones or updates the required skill-pack repos into `~/.workflow-agents/packs/`
+- it syncs their packaged skills into `~/.claude/skills/` and `~/.agents/skills/`
+- it installs the Claude agents
+- it renders the Codex agents with machine-specific `[[skills.config]]` paths
+- it validates that the required skills are present after install
+
+## Dependencies
+
+- Agent definitions live in this repo.
+- Skill dependencies live in [scripts/dependencies.json](scripts/dependencies.json).
+- Required packs are bootstrapped by [scripts/bootstrap_dependencies.py](scripts/bootstrap_dependencies.py).
+- Dependency validation is handled by [scripts/check_dependencies.py](scripts/check_dependencies.py).
 
 ## Design
 
@@ -68,6 +81,16 @@ The relevant skill packs should already be installed under `~/.agents/skills/` a
 - Agents are thin workflow workers with curated loadouts.
 - Claude agents preload only a tight skill list because those skills are injected into context at startup.
 - Codex agents stay role-scoped and can be rendered with explicit `skills.config` entries for local installations.
+
+## Placement
+
+The current recommendation is:
+
+- keep shared workflow agents in this central repo
+- keep reusable skills in the individual pack repos
+- avoid duplicating the full shared roster into every pack repo
+
+Details: [docs/repo-placement.md](docs/repo-placement.md)
 
 ## Loadout map
 

@@ -53,3 +53,8 @@ This document maps each workflow agent to its curated skill set.
 ## research-writer
 
 - Skills: search-string-designer, paper-screening-checker, related-work-synthesizer, evidence-strength-scorer, gap-finder, critical-analysis-writer, reference-integrity-checker, evaluation-report-writer
+
+## Dependency model
+
+- The agent-to-pack mapping is declared in [scripts/dependencies.json](../scripts/dependencies.json).
+- Installers bootstrap those pack repos automatically before installing or rendering agents.
