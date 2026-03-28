@@ -62,6 +62,10 @@ def main(argv):
     for repo_name in repos:
         repo_dir = clone_or_pull(repo_name, CONFIG["repos"][repo_name]["url"])
         install_repo(repo_dir)
+    subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "normalize_skills.py"), str(AGENTS_ROOT), str(CLAUDE_ROOT)],
+        check=True,
+    )
     print(f"installed dependencies for {len(repos)} pack repos")
 
 

@@ -70,6 +70,7 @@ The installer is dependency-aware:
 
 - it clones or updates the required skill-pack repos into `~/.workflow-agents/packs/`
 - it syncs their packaged skills into `~/.claude/skills/` and `~/.agents/skills/`
+- it normalizes installed `SKILL.md` files to include Codex-compatible `name` and `description` frontmatter when upstream packs are missing it
 - it installs the Claude agents
 - it renders the Codex agents with machine-specific `[[skills.config]]` paths
 - it validates that the required skills are present after install
@@ -79,6 +80,7 @@ The installer is dependency-aware:
 - Agent definitions live in this repo.
 - Skill dependencies live in [scripts/dependencies.json](scripts/dependencies.json).
 - Required packs are bootstrapped by [scripts/bootstrap_dependencies.py](scripts/bootstrap_dependencies.py).
+- Skill schema normalization is handled by [scripts/normalize_skills.py](scripts/normalize_skills.py).
 - Dependency validation is handled by [scripts/check_dependencies.py](scripts/check_dependencies.py).
 
 ## Design
