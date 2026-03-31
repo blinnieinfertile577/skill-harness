@@ -4,7 +4,7 @@ Record one section per session pair. A session pair is one Group A run and one G
 
 ---
 
-## Cumulative summary (7 experiments, 10 sessions)
+## Cumulative summary (8 experiments, 16 sessions)
 
 | # | Experiment | Task | Group A | Group B | Delta |
 |---|-----------|------|:-------:|:-------:|:-----:|
@@ -13,7 +13,8 @@ Record one section per session pair. A session pair is one Group A run and one G
 | 3 | Greenfield large | task-api-01 | 32/35 | 19/35 | +13 |
 | 4 | Maintenance/handoff | handoff-01 | 33/35 | 19/35 | +14 |
 | 7 | Ambiguous brief | ambiguous-01 | **35/35** | 13/35 | **+22** |
-| **Avg** | | | **32.6** | **18.0** | **+14.6** |
+| 8 | Multi-session (3 chains) | multi-01 | 34/35 | 21/35 | +13 |
+| **Avg** | | | **32.8** | **18.5** | **+14.3** |
 
 **Component isolation (Exp 5 — 4 groups, same task):**
 
@@ -418,19 +419,50 @@ Skip the overhead when:
 | S2 | Task CRUD (createTask/getTasks/updateTask/deleteTask) | TBD | 74 tests total |
 | S3 | Login rate limiting (5 failures → 15-min lockout) | TBD | TBD |
 
-### Notes from completed sessions
+### Scores
 
-**Group B S1:** 29 tests, clean implementation. README documented all design decisions well.
+| Metric | Group A (toolkit) | Group B (baseline) |
+|--------|:----------------:|:-----------------:|
+| Spec compliance | 5 / 5 | 0 / 5 |
+| Evidence quality | 4 / 5 | 0 / 5 |
+| Output correctness | 5 / 5 | 5 / 5 |
+| Over-engineering *(inverted)* | 5 / 5 | 5 / 5 |
+| Drift *(inverted)* | 5 / 5 | 5 / 5 |
+| Quality gate adherence | 5 / 5 | 3 / 5 |
+| Documentation quality | 5 / 5 | 3 / 5 |
+| **Total** | **34 / 35** | **21 / 35** |
 
-**Group B S2 (fresh agent):** Added `getUsernameFromToken` to auth.js (needed, not present), created `tasks.js` (45 tests), updated `package.json` to run both files. 74 tests total, 0 failures. Agent explicitly reported **zero friction** — existing README and JSDoc were clear enough to proceed without additional scaffolding.
+**Delta: +13.** Consistent with greenfield large (Exp 3, also +13).
 
-**Group A S1:** 16 tests, specgraph verify PASS with 1 advisory warn. Spec documented "Patterns Established" including session store structure, test helper pattern, annotation conventions, and out-of-scope items for future agents.
+### Session progression
 
-*(Group A S2, Group A S3, Group B S3 in progress — to be scored once complete)*
+**Group A (full toolkit):**
 
-### Final scoring
+| Session | Task | Tests | Verify | Agent friction |
+|---|---|:---:|---|---|
+| S1 | Auth module | 16 | WARN (advisory — no @test) | N/A (baseline) |
+| S2 | Task CRUD | 53 | 2×WARN (advisory) | "Spec clear — Patterns Established told me exactly what to do" |
+| S3 | Rate limiting | 66 | 3×WARN (advisory) | "AUTH-001.md literally said 'Rate limiting (see future Session 3)'" |
 
-*(Pending completion of all sessions)*
+**Group B (baseline):**
+
+| Session | Task | Tests | Verify | Agent friction |
+|---|---|:---:|---|---|
+| S1 | Auth module | 29 | n/a | N/A (baseline) |
+| S2 | Task CRUD | 74 | n/a | "Friction essentially zero" — needed to add `getUsernameFromToken` |
+| S3 | Rate limiting | 88 | n/a | "Very low friction" — 1 test conflict: existing test looped 5 failures and expected success on 6th; required rewrite |
+
+### Key observations
+
+**Group B was also well-documented.** The baseline agent in S1 wrote clear JSDoc and README, so S2 and S3 agents also reported low friction. This is the most nuanced result across all experiments — well-written code without spec tooling can also guide fresh agents effectively, up to a point.
+
+**The difference was structural, not qualitative.** Group B S3's one test conflict arose because S1 wrote `'wrong password after register always fails even on repeated attempts'` with a loop of exactly 5 failures — no one told it to reserve that number for rate limiting. Group A S1's spec explicitly noted rate limiting as "Out of Scope" for that session; the test suite naturally avoided writing 5-failure loops that would collide with S3's requirements.
+
+**Evidence quality 4/5** (Group A) — the compounding multi-spec chain across 3 sessions reaches near-maximum evidence for E0 annotations. 25 claims across 3 specs is the richest evidence chain in all experiments. One point deducted because @test annotations were not used, leaving verification claims advisory rather than structural.
+
+**Group B test count exceeded Group A in every session** (29 vs 16, 74 vs 53, 88 vs 66). The 22-test deficit at S3 reflects spec overhead. Group B agents have more cognitive budget for test-writing because they skip the spec-writing step entirely.
+
+**Toolkit friction was notably lower in S3 than S2.** Group A S3 agent had zero surprises — the spec literally told it where to put rate limiting. Group B S3 had one (minor) surprise. This suggests the compounding benefit is real but modest on small-scope additions.
 
 ---
 

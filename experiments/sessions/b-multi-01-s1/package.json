@@ -1,0 +1,14 @@
+{
+  "name": "auth-module",
+  "version": "1.0.0",
+  "description": "Auth module: login/logout/isValidSession with SHA-256+salt, 30-min inactivity expiry",
+  "type": "module",
+  "main": "src/auth.js",
+  "scripts": {
+    "test": "node --test test/auth.test.js test/tasks.test.js test/ratelimit.test.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT"
+}

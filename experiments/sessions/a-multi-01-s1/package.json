@@ -1,0 +1,11 @@
+{
+  "name": "a-multi-01-s1",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test auth.test.js tasks.test.js ratelimit.test.js"
+  },
+  "dependencies": {
+    "@45ck/agent-docs": "file:../../../../agent-docs"
+  }
+}
