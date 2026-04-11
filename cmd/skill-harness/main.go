@@ -171,7 +171,7 @@ func runInstall(root string, deps dependencyConfig, loadouts loadoutConfig, args
 		if len(agents) == 0 {
 			agents = sortedKeys(loadouts)
 		}
-		exitOnErr(copyClaudeAgents(root, agents))
+		exitOnErr(runPython(root, "scripts/render_claude_agents.py", agentArgs(agents)...))
 		exitOnErr(runPython(root, "scripts/render_codex_agents.py", agentArgs(agents)...))
 		exitOnErr(runPython(root, "scripts/check_dependencies.py", agentArgs(agents)...))
 	}
