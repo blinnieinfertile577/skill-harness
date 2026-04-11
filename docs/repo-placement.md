@@ -1,31 +1,31 @@
 # Repo Placement
 
-The right model is not full duplication everywhere.
+The right model is central workflow ownership with flexible pack placement.
 
 ## Recommendation
 
-- Keep `skill-harness` as the canonical source of truth for shared workflow agents and install tooling.
-- Keep the skill-pack repos as the canonical source of truth for reusable skills.
-- Do not copy the full 13-agent roster into every individual pack repo.
+- Keep `skill-harness` as the canonical source of truth for shared workflow agents, install tooling, and embedded suite-local packs.
+- Keep external pack repos as optional dependency sources when a pack already has its own lifecycle.
+- Use repo-local `packs/` directories for incubating capabilities, suite-local workflows, or packs that do not justify their own repository yet.
 
 ## Why
 
-- The agents are cross-pack compositions, so most of them do not belong cleanly to a single pack repo.
-- Duplicating full agent definitions across pack repos creates version drift, especially once loadouts change.
-- A central harness repo makes dependency management, install flows, and harness-specific formats easier to maintain.
+- The agents are cross-pack compositions, so they still belong here.
+- Some capabilities are easier to evolve inside the harness before they deserve a separate repo.
+- A central harness repo keeps dependency management, install flows, and pack discovery coherent even when packs come from mixed sources.
 
-## What to allow in individual pack repos
+## Pack placement rule
 
-- Lightweight references in the README to relevant workflow agents.
-- Optional pack-local specialist agents only when they are genuinely pack-specific.
-- Example: a narrowly scoped `security-threat-modeler` inside `security-engineering-skills` could make sense, but the full shared roster should stay centralized.
+- Shared workflow agents: keep in `skill-harness`.
+- Embedded packs under `packs/`: use for incubating, suite-local, or newly imported capabilities.
+- External pack repos: keep using them when they already exist and have clear ownership outside this repo.
 
 ## Practical rule
 
-- Shared multi-pack workflow agents: keep in `skill-harness`.
-- Pack-specific helper agents: allow in the individual repo if they only depend on that repo or that repo plus one tightly related pack.
-- If an agent starts depending on three or more packs, move it to `skill-harness`.
+- Start new or imported capabilities as embedded packs unless there is an immediate reason for separate repository ownership.
+- Split a pack into its own repo only when it needs an independent lifecycle, separate maintainers, or reuse outside the harness.
+- Do not duplicate the same pack in both an embedded directory and a separate repo.
 
 ## Current decision
 
-For the current roster, `skill-harness` should remain the main home. Individual pack repos should link to it rather than duplicate it.
+`skill-harness` remains the suite entrypoint, and it now supports a hybrid model: remote dependency packs plus embedded local packs under `packs/`.

@@ -6,5 +6,6 @@ Included skills:
 - `agent-selection`
 - `agent-handoff-planning`
 - `beads-task-shaping`
+- `third-party-skill-intake`
 
 This plugin complements `skill-harness`. It does not replace the project agent files in `.codex/agents/`.
