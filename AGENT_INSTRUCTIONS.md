@@ -6,9 +6,10 @@ Use this file when another agent needs to install or use `skill-harness` correct
 
 `skill-harness` is both:
 
-- the installer for the shared 45ck skill-pack and agent suite
+- the installer for the shared 45ck skill, doctrine, and agent suite
 - the setup repo for project-level tooling based on `@45ck/noslop`, `45ck/agent-docs`, and optional Beads integration
 - the home for embedded suite-local packs under `packs/`
+- the dependency entrypoint for pack repos, doctrine repos, and single-skill repos such as `repo-branding-skill`
 
 ## Shared suite install
 
@@ -31,6 +32,7 @@ Selective install examples:
 ```bash
 ./skill-harness install --agents=requirements-analyst,system-modeler
 ./skill-harness install --packs=business-analysis-skills,documentation-evidence-skills --packs-only
+./skill-harness install --packs=frontier-agent-playbook,repo-branding-skill --packs-only
 ./skill-harness install --interactive
 ```
 
@@ -66,6 +68,23 @@ Useful variants:
 ./skill-harness setup-project --dir path/to/project --skip-noslop
 ./skill-harness setup-project --dir path/to/project --skip-beads
 ```
+
+## Frontier doctrine companion
+
+Use [`45ck/frontier-agent-playbook`](https://github.com/45ck/frontier-agent-playbook) when the target repo should carry shared frontier-agent doctrine in addition to installed skills.
+
+Install its skills globally through `skill-harness`:
+
+```bash
+./skill-harness install --packs=frontier-agent-playbook --packs-only
+```
+
+For repo-local doctrine files, copy these into the target project after setup:
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `AGENT_INSTRUCTIONS.md`
+- `llms.txt`
 
 ## Full Toolkit Setup
 
@@ -103,8 +122,9 @@ For the fully automated equivalent of the above, use the `setup-project` command
 
 - Run commands from the repo root unless the command explicitly targets another directory.
 - Prefer the CLI over manual copying.
-- Do not assume pack repos are already installed.
+- Do not assume dependency repos are already installed.
 - Do not assume `noslop` or `agent-docs` are already present in the target project.
+- Do not assume repo-local doctrine files are already present unless they were copied from `frontier-agent-playbook`.
 - Use `setup-project` for project scaffolding instead of inventing a custom sequence.
 
 ## Verify

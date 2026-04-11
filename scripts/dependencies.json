@@ -3,6 +3,15 @@
     "business-analysis-skills": {
       "url": "https://github.com/45ck/business-analysis-skills.git"
     },
+    "cloud-platform-operations-skills": {
+      "url": "https://github.com/45ck/cloud-platform-operations-skills.git"
+    },
+    "fagan-inspection-skill": {
+      "url": "https://github.com/45ck/fagan-inspection-skill.git"
+    },
+    "frontier-agent-playbook": {
+      "url": "https://github.com/45ck/frontier-agent-playbook.git"
+    },
     "documentation-evidence-skills": {
       "url": "https://github.com/45ck/documentation-evidence-skills.git"
     },
@@ -75,69 +84,98 @@
     "maintenance-evolution-skills": {
       "url": "https://github.com/45ck/maintenance-evolution-skills.git"
     },
+    "marketing-product-skills": {
+      "url": "https://github.com/45ck/marketing-product-skills.git"
+    },
+    "repo-branding-skill": {
+      "url": "https://github.com/45ck/repo-branding-skill.git"
+    },
     "research-literature-review-skills": {
       "url": "https://github.com/45ck/research-literature-review-skills.git"
+    },
+    "coding-workflow-skills": {
+      "path": "packs/coding-workflow-skills"
+    },
+    "design-tooling-skills": {
+      "path": "packs/design-tooling-skills"
+    },
+    "integration-tooling-skills": {
+      "path": "packs/integration-tooling-skills"
     }
   },
   "agents": {
     "requirements-analyst": {
       "repos": [
         "business-analysis-skills",
-        "documentation-evidence-skills"
+        "documentation-evidence-skills",
+        "frontier-agent-playbook"
       ]
     },
     "requirements-analyst-beads": {
       "repos": [
         "business-analysis-skills",
-        "documentation-evidence-skills"
+        "documentation-evidence-skills",
+        "frontier-agent-playbook"
       ]
     },
     "ux-researcher": {
       "repos": [
         "hci-review-skill",
         "business-analysis-skills",
-        "documentation-evidence-skills"
+        "documentation-evidence-skills",
+        "frontier-agent-playbook"
       ]
     },
     "system-modeler": {
       "repos": [
         "uml-analysis-modelling-skills",
         "business-analysis-skills",
-        "software-architecture-skills"
+        "software-architecture-skills",
+        "frontier-agent-playbook"
       ]
     },
     "system-modeler-beads": {
       "repos": [
         "uml-analysis-modelling-skills",
         "business-analysis-skills",
-        "software-architecture-skills"
+        "software-architecture-skills",
+        "frontier-agent-playbook"
       ]
     },
     "software-architect": {
       "repos": [
         "software-architecture-skills",
         "enterprise-architecture-integration-skills",
-        "documentation-evidence-skills"
+        "cloud-platform-operations-skills",
+        "documentation-evidence-skills",
+        "frontier-agent-playbook",
+        "integration-tooling-skills"
       ]
     },
     "software-architect-beads": {
       "repos": [
         "software-architecture-skills",
         "enterprise-architecture-integration-skills",
-        "documentation-evidence-skills"
+        "cloud-platform-operations-skills",
+        "documentation-evidence-skills",
+        "frontier-agent-playbook",
+        "integration-tooling-skills"
       ]
     },
     "web-engineer": {
       "repos": [
         "web-engineering-skills",
         "backend-persistence-skills",
-        "oop-code-structure-skills"
+        "oop-code-structure-skills",
+        "frontier-agent-playbook",
+        "design-tooling-skills"
       ]
     },
     "backend-engineer": {
       "repos": [
         "backend-persistence-skills",
         "oop-code-structure-skills",
+        "frontier-agent-playbook",
         "data-structures-algorithmic-reasoning-skills"
       ]
     },
@@ -145,70 +183,89 @@
       "repos": [
         "verification-test-design-skills",
         "non-functional-testing-skills",
-        "design-for-testability-skills"
+        "design-for-testability-skills",
+        "frontier-agent-playbook"
       ]
     },
     "test-designer-beads": {
       "repos": [
         "verification-test-design-skills",
         "non-functional-testing-skills",
-        "design-for-testability-skills"
+        "design-for-testability-skills",
+        "frontier-agent-playbook"
       ]
     },
     "qa-automation-engineer": {
       "repos": [
         "automation-testing-skills",
         "verification-test-design-skills",
-        "documentation-evidence-skills"
+        "documentation-evidence-skills",
+        "frontier-agent-playbook"
       ]
     },
     "quality-reviewer": {
       "repos": [
+        "fagan-inspection-skill",
         "software-quality-skills",
         "code-review-inspection-skills",
-        "refactoring-code-smells-skills"
+        "refactoring-code-smells-skills",
+        "frontier-agent-playbook"
       ]
     },
     "security-reviewer": {
       "repos": [
         "security-engineering-skills",
         "authentication-cryptography-skills",
-        "llm-agent-security-skills"
+        "llm-agent-security-skills",
+        "frontier-agent-playbook"
       ]
     },
     "security-reviewer-beads": {
       "repos": [
         "security-engineering-skills",
         "authentication-cryptography-skills",
-        "llm-agent-security-skills"
+        "llm-agent-security-skills",
+        "frontier-agent-playbook"
       ]
     },
     "pentest-reviewer": {
       "repos": [
         "pentest-security-testing-skills",
-        "security-engineering-skills"
+        "security-engineering-skills",
+        "frontier-agent-playbook"
       ]
     },
     "delivery-manager": {
       "repos": [
         "agile-delivery-skills",
         "project-management-skills",
+        "cloud-platform-operations-skills",
         "deployment-release-skills",
-        "maintenance-evolution-skills"
+        "maintenance-evolution-skills",
+        "frontier-agent-playbook"
       ]
     },
     "delivery-manager-beads": {
       "repos": [
         "agile-delivery-skills",
         "project-management-skills",
+        "cloud-platform-operations-skills",
         "deployment-release-skills",
-        "maintenance-evolution-skills"
+        "maintenance-evolution-skills",
+        "frontier-agent-playbook"
       ]
     },
     "research-writer": {
       "repos": [
         "research-literature-review-skills",
-        "documentation-evidence-skills"
+        "documentation-evidence-skills",
+        "frontier-agent-playbook"
+      ]
+    },
+    "workflow-engineer": {
+      "repos": [
+        "coding-workflow-skills",
+        "frontier-agent-playbook"
       ]
     }
   }

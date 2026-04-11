@@ -22,7 +22,7 @@
   <path d="M182 308h74a42 42 0 0 0 42-42v0a42 42 0 0 1 42-42h28" fill="none" stroke="#bfdbfe" stroke-width="14" stroke-linecap="round" />
 
   <text x="454" y="206" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="700">skill-harness</text>
-  <text x="454" y="268" fill="#dbeafe" font-family="Segoe UI, Arial, sans-serif" font-size="28">Install the skill-pack suite and shared agents for Claude and Codex.</text>
+  <text x="454" y="268" fill="#dbeafe" font-family="Segoe UI, Arial, sans-serif" font-size="28">Install the dependency-repo suite and shared agents for Claude and Codex.</text>
 
   <rect x="458" y="332" width="236" height="64" rx="18" fill="#0f172a" stroke="#60a5fa" />
   <text x="494" y="374" fill="#e0f2fe" font-family="Consolas, 'Courier New', monospace" font-size="28">install --all</text>
@@ -32,5 +32,5 @@
 
   <rect x="458" y="430" width="516" height="92" rx="20" fill="#09111f" stroke="#1e3a8a" />
   <text x="492" y="472" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="600">What it bootstraps</text>
-  <text x="492" y="510" fill="#bfdbfe" font-family="Segoe UI, Arial, sans-serif" font-size="24">26 pack repos, shared skills, Claude agents, Codex agents</text>
+  <text x="492" y="510" fill="#bfdbfe" font-family="Segoe UI, Arial, sans-serif" font-size="24">31 external repos, 3 embedded packs, shared skills, agents</text>
 </svg>

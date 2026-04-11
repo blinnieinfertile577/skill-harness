@@ -8,7 +8,10 @@
       "acceptance-criteria-writer",
       "requirements-prioritizer",
       "stakeholder-analysis",
-      "spec-writer"
+      "spec-writer",
+      "frontier-model-context",
+      "digital-expert-test",
+      "pre-ai-scarcity-thinking"
     ]
   },
   "requirements-analyst-beads": {
@@ -20,7 +23,10 @@
       "acceptance-criteria-writer",
       "requirements-prioritizer",
       "stakeholder-analysis",
-      "spec-writer"
+      "spec-writer",
+      "frontier-model-context",
+      "digital-expert-test",
+      "pre-ai-scarcity-thinking"
     ]
   },
   "ux-researcher": {
@@ -32,7 +38,10 @@
       "wireframe-critic",
       "field-study-planner",
       "satisfaction-questionnaire-writer",
-      "evaluation-report-writer"
+      "evaluation-report-writer",
+      "frontier-model-context",
+      "digital-expert-test",
+      "pre-ai-scarcity-thinking"
     ]
   },
   "system-modeler": {
@@ -44,7 +53,9 @@
       "state-model-builder",
       "domain-class-modeler",
       "model-consistency-checker",
-      "scenario-to-uml-transformer"
+      "scenario-to-uml-transformer",
+      "frontier-model-context",
+      "digital-expert-test"
     ]
   },
   "system-modeler-beads": {
@@ -56,7 +67,9 @@
       "state-model-builder",
       "domain-class-modeler",
       "model-consistency-checker",
-      "scenario-to-uml-transformer"
+      "scenario-to-uml-transformer",
+      "frontier-model-context",
+      "digital-expert-test"
     ]
   },
   "software-architect": {
@@ -68,7 +81,15 @@
       "service-decomposition-advisor",
       "runtime-view-writer",
       "deployment-view-writer",
-      "integration-boundary-mapper"
+      "integration-boundary-mapper",
+      "public-private-hybrid-cloud-reviewer",
+      "mcp-server-planning",
+      "app-integration-shaping",
+      "frontier-model-context",
+      "digital-expert-test",
+      "legacy-automation-fallback",
+      "llm-default-architecture",
+      "verification-first-delivery"
     ]
   },
   "software-architect-beads": {
@@ -80,7 +101,15 @@
       "service-decomposition-advisor",
       "runtime-view-writer",
       "deployment-view-writer",
-      "integration-boundary-mapper"
+      "integration-boundary-mapper",
+      "public-private-hybrid-cloud-reviewer",
+      "mcp-server-planning",
+      "app-integration-shaping",
+      "frontier-model-context",
+      "digital-expert-test",
+      "legacy-automation-fallback",
+      "llm-default-architecture",
+      "verification-first-delivery"
     ]
   },
   "web-engineer": {
@@ -92,7 +121,14 @@
       "session-state-strategy-reviewer",
       "server-side-validation-enforcer",
       "mvc-boundary-checker",
-      "class-responsibility-checker"
+      "class-responsibility-checker",
+      "figma-implementation-planning",
+      "design-token-alignment",
+      "frontier-model-context",
+      "digital-expert-test",
+      "legacy-automation-fallback",
+      "llm-default-architecture",
+      "verification-first-delivery"
     ]
   },
   "backend-engineer": {
@@ -104,7 +140,12 @@
       "api-error-model-designer",
       "schema-normalizer",
       "data-structure-selector",
-      "class-responsibility-checker"
+      "class-responsibility-checker",
+      "frontier-model-context",
+      "digital-expert-test",
+      "legacy-automation-fallback",
+      "llm-default-architecture",
+      "verification-first-delivery"
     ]
   },
   "test-designer": {
@@ -116,7 +157,10 @@
       "test-oracle-writer",
       "coverage-goal-planner",
       "testability-reviewer",
-      "nfr-evidence-matrix-builder"
+      "nfr-evidence-matrix-builder",
+      "frontier-model-context",
+      "digital-expert-test",
+      "verification-first-delivery"
     ]
   },
   "test-designer-beads": {
@@ -128,7 +172,10 @@
       "test-oracle-writer",
       "coverage-goal-planner",
       "testability-reviewer",
-      "nfr-evidence-matrix-builder"
+      "nfr-evidence-matrix-builder",
+      "frontier-model-context",
+      "digital-expert-test",
+      "verification-first-delivery"
     ]
   },
   "qa-automation-engineer": {
@@ -140,11 +187,16 @@
       "fixture-and-test-data-builder",
       "regression-suite-curator",
       "test-readability-reviewer",
-      "test-plan-writer"
+      "test-plan-writer",
+      "frontier-model-context",
+      "digital-expert-test",
+      "legacy-automation-fallback",
+      "verification-first-delivery"
     ]
   },
   "quality-reviewer": {
     "skills": [
+      "fagan-inspection",
       "maintainability-reviewer",
       "technical-debt-auditor",
       "code-review-checklist-runner",
@@ -152,7 +204,10 @@
       "code-smell-detector",
       "refactoring-candidate-ranker",
       "quality-risk-register-builder",
-      "rework-plan-writer"
+      "rework-plan-writer",
+      "frontier-model-context",
+      "digital-expert-test",
+      "legacy-automation-fallback"
     ]
   },
   "security-reviewer": {
@@ -164,7 +219,10 @@
       "authn-authz-separator",
       "token-auth-design-reviewer",
       "prompt-injection-reviewer",
-      "tool-permission-boundary-checker"
+      "tool-permission-boundary-checker",
+      "frontier-model-context",
+      "digital-expert-test",
+      "verification-first-delivery"
     ]
   },
   "security-reviewer-beads": {
@@ -176,7 +234,10 @@
       "authn-authz-separator",
       "token-auth-design-reviewer",
       "prompt-injection-reviewer",
-      "tool-permission-boundary-checker"
+      "tool-permission-boundary-checker",
+      "frontier-model-context",
+      "digital-expert-test",
+      "verification-first-delivery"
     ]
   },
   "pentest-reviewer": {
@@ -188,7 +249,10 @@
       "report-finding-writer",
       "repro-steps-writer",
       "remediation-priority-ranker",
-      "input-filter-bypass-checker"
+      "input-filter-bypass-checker",
+      "frontier-model-context",
+      "digital-expert-test",
+      "verification-first-delivery"
     ]
   },
   "delivery-manager": {
@@ -200,7 +264,12 @@
       "milestone-planner",
       "go-live-readiness-reviewer",
       "rollback-readiness-checker",
-      "maintenance-triage-helper"
+      "maintenance-triage-helper",
+      "update-rollback-planner",
+      "frontier-model-context",
+      "digital-expert-test",
+      "pre-ai-scarcity-thinking",
+      "verification-first-delivery"
     ]
   },
   "delivery-manager-beads": {
@@ -212,7 +281,12 @@
       "milestone-planner",
       "go-live-readiness-reviewer",
       "rollback-readiness-checker",
-      "maintenance-triage-helper"
+      "maintenance-triage-helper",
+      "update-rollback-planner",
+      "frontier-model-context",
+      "digital-expert-test",
+      "pre-ai-scarcity-thinking",
+      "verification-first-delivery"
     ]
   },
   "research-writer": {
@@ -224,7 +298,23 @@
       "gap-finder",
       "critical-analysis-writer",
       "reference-integrity-checker",
-      "evaluation-report-writer"
+      "evaluation-report-writer",
+      "frontier-model-context",
+      "digital-expert-test",
+      "pre-ai-scarcity-thinking"
+    ]
+  },
+  "workflow-engineer": {
+    "skills": [
+      "issue-driven-delivery",
+      "gh-review-followthrough",
+      "gh-actions-failure-triage",
+      "review-ready-check",
+      "frontier-model-context",
+      "digital-expert-test",
+      "legacy-automation-fallback",
+      "llm-default-architecture",
+      "verification-first-delivery"
     ]
   }
 }

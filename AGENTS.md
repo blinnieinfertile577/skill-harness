@@ -8,6 +8,7 @@ Guidelines:
 - Prefer the curated skills listed in each agent before reaching for unrelated skills.
 - Treat packs as the capability library and agents as the workflow loadout.
 - Treat this repo as the suite entrypoint and project setup repo, including embedded packs under `packs/`.
+- Treat `frontier-agent-playbook` as the shared doctrine companion when a task needs frontier-capability priors, agentic thinking, or anti-fallback framing.
 
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->
 ## Beads Issue Tracker

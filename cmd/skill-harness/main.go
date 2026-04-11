@@ -22,7 +22,8 @@ type dependencyConfig struct {
 }
 
 type repoConfig struct {
-	URL string `json:"url"`
+	URL  string `json:"url"`
+	Path string `json:"path"`
 }
 
 type agentConfig struct {
@@ -37,6 +38,33 @@ type selection struct {
 	All   bool
 	Agent []string
 	Repo  []string
+}
+
+type projectScope string
+
+const (
+	projectScopeAuto      projectScope = "auto"
+	projectScopeRoot      projectScope = "root"
+	projectScopeWorkspace projectScope = "workspace"
+)
+
+type packageManager string
+
+const (
+	packageManagerAuto packageManager = "auto"
+	packageManagerNpm  packageManager = "npm"
+	packageManagerPnpm packageManager = "pnpm"
+	packageManagerYarn packageManager = "yarn"
+	packageManagerBun  packageManager = "bun"
+)
+
+type projectSetupContext struct {
+	TargetDir      string
+	OperationDir   string
+	MonorepoRoot   string
+	Monorepo       bool
+	Scope          projectScope
+	PackageManager packageManager
 }
 
 type beadsInstallMode string
@@ -83,7 +111,7 @@ func main() {
 func runList(root string, deps dependencyConfig, loadouts loadoutConfig, args []string) {
 	fs := flag.NewFlagSet("list", flag.ExitOnError)
 	showAgents := fs.Bool("agents", false, "List agents.")
-	showPacks := fs.Bool("packs", false, "List pack repos.")
+	showPacks := fs.Bool("packs", false, "List packs.")
 	fs.Parse(args)
 
 	if !*showAgents && !*showPacks {
@@ -101,7 +129,7 @@ func runList(root string, deps dependencyConfig, loadouts loadoutConfig, args []
 		if *showAgents {
 			fmt.Println()
 		}
-		fmt.Println("Pack repos:")
+		fmt.Println("Packs:")
 		for _, name := range sortedKeys(deps.Repos) {
 			fmt.Printf("- %s\n", name)
 		}
@@ -112,10 +140,10 @@ func runInstall(root string, deps dependencyConfig, loadouts loadoutConfig, args
 	fs := flag.NewFlagSet("install", flag.ExitOnError)
 	all := fs.Bool("all", false, "Install all packs and all agents.")
 	interactive := fs.Bool("interactive", false, "Pick packs and agents interactively.")
-	packsOnly := fs.Bool("packs-only", false, "Install only skill packs.")
-	agentsOnly := fs.Bool("agents-only", false, "Install only agent files without bootstrapping packs.")
+	packsOnly := fs.Bool("packs-only", false, "Install only dependency repos.")
+	agentsOnly := fs.Bool("agents-only", false, "Install only agent files without bootstrapping dependency repos.")
 	agentsCSV := fs.String("agents", "", "Comma-separated agent names.")
-	packsCSV := fs.String("packs", "", "Comma-separated pack repo names.")
+	packsCSV := fs.String("packs", "", "Comma-separated dependency repo names.")
 	fs.Parse(args)
 
 	if *packsOnly && *agentsOnly {
@@ -148,7 +176,7 @@ func runInstall(root string, deps dependencyConfig, loadouts loadoutConfig, args
 		exitOnErr(runPython(root, "scripts/check_dependencies.py", agentArgs(agents)...))
 	}
 
-	fmt.Printf("Installed %d pack repo(s) and %d agent(s)\n", len(repos), len(agents))
+	fmt.Printf("Installed %d dependency repo(s) and %d agent(s)\n", len(repos), len(agents))
 }
 
 func runSetupProject(args []string) {
@@ -159,16 +187,19 @@ func runSetupProject(args []string) {
 	skipBeads := fs.Bool("skip-beads", false, "Do not install or initialize Beads.")
 	skipClaudeSettings := fs.Bool("skip-claude-settings", false, "Do not write .claude/settings.json.")
 	installOnly := fs.Bool("install-only", false, "Install packages only; skip initialization commands.")
+	scopeValue := fs.String("scope", string(projectScopeAuto), "Setup scope: auto, root, or workspace.")
+	packageManagerValue := fs.String("package-manager", string(packageManagerAuto), "Package manager: auto, npm, pnpm, yarn, or bun.")
 	fs.Parse(args)
 
 	projectDir, err := filepath.Abs(*targetDir)
 	exitOnErr(err)
 
-	exitOnErr(requireCommand("npm"))
-	exitOnErr(requireCommand("npx"))
+	ctx, err := resolveProjectSetupContext(projectDir, *scopeValue, *packageManagerValue)
+	exitOnErr(err)
+	exitOnErr(requireSetupCommands(ctx.PackageManager))
 
-	if _, err := os.Stat(filepath.Join(projectDir, "package.json")); errors.Is(err, os.ErrNotExist) {
-		exitOnErr(writeMinimalPackageJSON(projectDir))
+	if _, err := os.Stat(filepath.Join(ctx.OperationDir, "package.json")); errors.Is(err, os.ErrNotExist) {
+		exitOnErr(writeMinimalPackageJSON(ctx.OperationDir))
 	}
 
 	packages := []string{}
@@ -179,13 +210,12 @@ func runSetupProject(args []string) {
 		packages = append(packages, "github:45ck/agent-docs")
 	}
 	if len(packages) > 0 {
-		args := append([]string{"install", "-D"}, packages...)
-		exitOnErr(runCommand(projectDir, "npm", args...))
+		exitOnErr(installPackages(ctx.OperationDir, ctx.PackageManager, packages...))
 	}
 
 	beadsMode := beadsDisabled
 	if !*skipBeads {
-		mode, err := installBeads(projectDir)
+		mode, err := installBeads(ctx.OperationDir)
 		exitOnErr(err)
 		beadsMode = mode
 	}
@@ -195,24 +225,24 @@ func runSetupProject(args []string) {
 	}
 
 	if *installOnly {
-		fmt.Printf("Installed project tooling in %s\n", projectDir)
+		fmt.Println(projectSetupSummary("Installed project tooling", ctx))
 		return
 	}
 
 	if !*skipAgentDocs {
-		exitOnErr(runCommand(projectDir, "npx", "agent-docs", "init"))
+		exitOnErr(runLocalTool(ctx.OperationDir, ctx.PackageManager, "agent-docs", "init"))
 	}
 	if !*skipNoslop {
-		exitOnErr(runCommand(projectDir, "npx", "noslop", "init"))
+		exitOnErr(runLocalTool(ctx.OperationDir, ctx.PackageManager, "noslop", "init"))
 	}
 	if beadsMode != beadsDisabled {
-		exitOnErr(initBeads(projectDir, beadsMode))
+		exitOnErr(initBeads(ctx.OperationDir, beadsMode))
 	}
 	if !*skipAgentDocs {
-		exitOnErr(runCommand(projectDir, "npx", "agent-docs", "install-gates", "--quality"))
+		exitOnErr(runLocalTool(ctx.OperationDir, ctx.PackageManager, "agent-docs", "install-gates", "--quality"))
 	}
 
-	fmt.Printf("Project setup complete in %s\n", projectDir)
+	fmt.Println(projectSetupSummary("Project setup complete", ctx))
 }
 
 // allowAgentTeams writes or updates .claude/settings.json to permit the Agent
@@ -523,6 +553,233 @@ func requireCommand(name string) error {
 	return nil
 }
 
+func requireSetupCommands(manager packageManager) error {
+	switch manager {
+	case packageManagerNpm:
+		if err := requireCommand("npm"); err != nil {
+			return err
+		}
+		return requireCommand("npx")
+	case packageManagerPnpm:
+		return requireCommand("pnpm")
+	case packageManagerYarn:
+		return requireCommand("yarn")
+	case packageManagerBun:
+		return requireCommand("bun")
+	default:
+		return fmt.Errorf("unsupported package manager: %s", manager)
+	}
+}
+
+func installPackages(dir string, manager packageManager, packages ...string) error {
+	if len(packages) == 0 {
+		return nil
+	}
+	switch manager {
+	case packageManagerNpm:
+		return runCommand(dir, "npm", append([]string{"install", "-D"}, packages...)...)
+	case packageManagerPnpm:
+		return runCommand(dir, "pnpm", append([]string{"add", "-D"}, packages...)...)
+	case packageManagerYarn:
+		return runCommand(dir, "yarn", append([]string{"add", "-D"}, packages...)...)
+	case packageManagerBun:
+		return runCommand(dir, "bun", append([]string{"add", "-d"}, packages...)...)
+	default:
+		return fmt.Errorf("unsupported package manager: %s", manager)
+	}
+}
+
+func runLocalTool(dir string, manager packageManager, tool string, args ...string) error {
+	switch manager {
+	case packageManagerNpm:
+		return runCommand(dir, "npx", append([]string{tool}, args...)...)
+	case packageManagerPnpm:
+		return runCommand(dir, "pnpm", append([]string{"exec", tool}, args...)...)
+	case packageManagerYarn:
+		return runCommand(dir, "yarn", append([]string{"exec", tool}, args...)...)
+	case packageManagerBun:
+		return runCommand(dir, "bun", append([]string{"x", tool}, args...)...)
+	default:
+		return fmt.Errorf("unsupported package manager: %s", manager)
+	}
+}
+
+func resolveProjectSetupContext(targetDir, scopeValue, packageManagerValue string) (projectSetupContext, error) {
+	scope, err := parseProjectScope(scopeValue)
+	if err != nil {
+		return projectSetupContext{}, err
+	}
+	managerPreference, err := parsePackageManager(packageManagerValue)
+	if err != nil {
+		return projectSetupContext{}, err
+	}
+
+	monorepoRoot := findMonorepoRoot(targetDir)
+	operationDir := targetDir
+	if scope != projectScopeWorkspace && monorepoRoot != "" {
+		operationDir = monorepoRoot
+	}
+
+	manager, err := resolvePackageManager(managerPreference, operationDir)
+	if err != nil {
+		return projectSetupContext{}, err
+	}
+
+	return projectSetupContext{
+		TargetDir:      targetDir,
+		OperationDir:   operationDir,
+		MonorepoRoot:   monorepoRoot,
+		Monorepo:       monorepoRoot != "",
+		Scope:          scope,
+		PackageManager: manager,
+	}, nil
+}
+
+func parseProjectScope(value string) (projectScope, error) {
+	switch projectScope(strings.ToLower(strings.TrimSpace(value))) {
+	case projectScopeAuto:
+		return projectScopeAuto, nil
+	case projectScopeRoot:
+		return projectScopeRoot, nil
+	case projectScopeWorkspace:
+		return projectScopeWorkspace, nil
+	default:
+		return "", fmt.Errorf("unsupported setup scope: %s", value)
+	}
+}
+
+func parsePackageManager(value string) (packageManager, error) {
+	switch packageManager(strings.ToLower(strings.TrimSpace(value))) {
+	case packageManagerAuto:
+		return packageManagerAuto, nil
+	case packageManagerNpm:
+		return packageManagerNpm, nil
+	case packageManagerPnpm:
+		return packageManagerPnpm, nil
+	case packageManagerYarn:
+		return packageManagerYarn, nil
+	case packageManagerBun:
+		return packageManagerBun, nil
+	default:
+		return "", fmt.Errorf("unsupported package manager: %s", value)
+	}
+}
+
+func resolvePackageManager(preferred packageManager, startDir string) (packageManager, error) {
+	if preferred != packageManagerAuto {
+		return preferred, nil
+	}
+	for dir := startDir; ; dir = filepath.Dir(dir) {
+		if manager := detectPackageManagerInDir(dir); manager != "" {
+			return manager, nil
+		}
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			break
+		}
+	}
+	return packageManagerNpm, nil
+}
+
+func detectPackageManagerInDir(dir string) packageManager {
+	if metadata, ok := readPackageJSONMetadata(dir); ok {
+		if manager := packageManagerFromMetadata(metadata.PackageManager); manager != "" {
+			return manager
+		}
+	}
+	switch {
+	case fileExists(filepath.Join(dir, "bun.lockb")), fileExists(filepath.Join(dir, "bun.lock")):
+		return packageManagerBun
+	case fileExists(filepath.Join(dir, "pnpm-lock.yaml")), fileExists(filepath.Join(dir, "pnpm-workspace.yaml")):
+		return packageManagerPnpm
+	case fileExists(filepath.Join(dir, "yarn.lock")):
+		return packageManagerYarn
+	case fileExists(filepath.Join(dir, "package-lock.json")), fileExists(filepath.Join(dir, "npm-shrinkwrap.json")):
+		return packageManagerNpm
+	default:
+		return ""
+	}
+}
+
+func packageManagerFromMetadata(value string) packageManager {
+	normalized := strings.ToLower(strings.TrimSpace(value))
+	switch {
+	case normalized == "":
+		return ""
+	case strings.HasPrefix(normalized, "npm@"), normalized == "npm":
+		return packageManagerNpm
+	case strings.HasPrefix(normalized, "pnpm@"), normalized == "pnpm":
+		return packageManagerPnpm
+	case strings.HasPrefix(normalized, "yarn@"), normalized == "yarn":
+		return packageManagerYarn
+	case strings.HasPrefix(normalized, "bun@"), normalized == "bun":
+		return packageManagerBun
+	default:
+		return ""
+	}
+}
+
+type packageJSONMetadata struct {
+	Workspaces     json.RawMessage `json:"workspaces"`
+	PackageManager string          `json:"packageManager"`
+}
+
+func readPackageJSONMetadata(dir string) (packageJSONMetadata, bool) {
+	path := filepath.Join(dir, "package.json")
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return packageJSONMetadata{}, false
+	}
+	var metadata packageJSONMetadata
+	if err := json.Unmarshal(data, &metadata); err != nil {
+		return packageJSONMetadata{}, false
+	}
+	return metadata, true
+}
+
+func findMonorepoRoot(start string) string {
+	for dir := start; ; dir = filepath.Dir(dir) {
+		if isMonorepoRoot(dir) {
+			return dir
+		}
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return ""
+		}
+	}
+}
+
+func isMonorepoRoot(dir string) bool {
+	if fileExists(filepath.Join(dir, "pnpm-workspace.yaml")) ||
+		fileExists(filepath.Join(dir, "lerna.json")) ||
+		fileExists(filepath.Join(dir, "nx.json")) ||
+		fileExists(filepath.Join(dir, "turbo.json")) ||
+		fileExists(filepath.Join(dir, "rush.json")) {
+		return true
+	}
+	metadata, ok := readPackageJSONMetadata(dir)
+	return ok && len(metadata.Workspaces) > 0
+}
+
+func fileExists(path string) bool {
+	info, err := os.Stat(path)
+	return err == nil && !info.IsDir()
+}
+
+func projectSetupSummary(prefix string, ctx projectSetupContext) string {
+	if ctx.OperationDir == ctx.TargetDir {
+		return fmt.Sprintf("%s in %s (scope=%s, package-manager=%s)", prefix, ctx.OperationDir, ctx.Scope, ctx.PackageManager)
+	}
+	return fmt.Sprintf(
+		"%s in %s (target=%s, scope=%s, package-manager=%s)",
+		prefix,
+		ctx.OperationDir,
+		ctx.TargetDir,
+		ctx.Scope,
+		ctx.PackageManager,
+	)
+}
+
 func writeMinimalPackageJSON(projectDir string) error {
 	base := strings.ToLower(filepath.Base(projectDir))
 	replacer := strings.NewReplacer(" ", "-", "_", "-", ".", "-", "/", "-", "\\", "-")
@@ -734,7 +991,7 @@ func printUsage(loadouts loadoutConfig, deps dependencyConfig) {
 	fmt.Println("Commands:")
 	fmt.Println("  list [--agents] [--packs]")
 	fmt.Println("  install [--all] [--interactive] [--packs-only] [--agents-only] [--agents=a,b] [--packs=x,y]")
-	fmt.Println("  setup-project [--dir path] [--install-only] [--skip-noslop] [--skip-agent-docs] [--skip-beads] [--skip-claude-settings]")
+	fmt.Println("  setup-project [--dir path] [--scope auto|root|workspace] [--package-manager auto|npm|pnpm|yarn|bun] [--install-only] [--skip-noslop] [--skip-agent-docs] [--skip-beads] [--skip-claude-settings]")
 	fmt.Println("  update")
 	fmt.Println("  check [--all] [--interactive] [--agents=a,b]")
 	fmt.Println("  render [--all] [--interactive] [--agents=a,b]")
