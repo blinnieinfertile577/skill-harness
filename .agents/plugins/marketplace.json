@@ -1,9 +1,0 @@
-{
-  "plugins": [
-    {
-      "name": "skill-harness-helpers",
-      "path": "plugins/skill-harness-helpers",
-      "description": "Cross-cutting helper skills for skill-harness agent selection, handoffs, and Beads task shaping."
-    }
-  ]
-}
